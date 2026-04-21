@@ -11,7 +11,7 @@ from telegram.ext import (
     ContextTypes,
 )
 from keep_alive import keep_alive
-from config import BOTS
+from config import BOTS, OWNER_ID
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -87,6 +87,8 @@ def make_join_handler(bot_name: str, store: MessageStore):
 
 def make_setmsg_handler(bot_name: str, store: MessageStore):
     async def setmsg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        if update.effective_user.id != OWNER_ID:
+            return
         args = context.args
         if not args or len(args) < 2:
             await update.message.reply_text(
@@ -119,6 +121,8 @@ def make_setmsg_handler(bot_name: str, store: MessageStore):
 
 def make_viewmsg_handler(bot_name: str, store: MessageStore):
     async def viewmsg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        if update.effective_user.id != OWNER_ID:
+            return
         messages = store.get()
         text = f"📋 *الرسائل الحالية لـ {bot_name}:*\n\n"
         for i, msg in enumerate(messages, start=1):
