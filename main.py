@@ -159,6 +159,7 @@ async def run_bot(token: str, bot_name: str, default_messages: list) -> None:
 
     app = ApplicationBuilder().token(token).build()
     app.add_handler(ChatJoinRequestHandler(make_join_handler(bot_name, store)))
+    app.add_handler(CommandHandler("start", make_start_handler(bot_name)))
     app.add_handler(CommandHandler("setmsg", make_setmsg_handler(bot_name, store)))
     app.add_handler(CommandHandler("viewmsg", make_viewmsg_handler(bot_name, store)))
 
