@@ -43,12 +43,6 @@ async def handle_join_request(update: Update, context: ContextTypes.DEFAULT_TYPE
     except Exception as e:
         logger.warning(f"Could not send DM to user {user.id}: {e}")
 
-    try:
-        await join_request.approve()
-        logger.info(f"Approved join request for user {user.id} in chat {chat.id}")
-    except Exception as e:
-        logger.error(f"Failed to approve join request for user {user.id}: {e}")
-
 
 def main() -> None:
     bot_token = os.environ["BOT_TOKEN"]
