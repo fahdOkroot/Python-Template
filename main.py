@@ -22,7 +22,6 @@ logger = logging.getLogger(__name__)
 DATA_DIR = Path("data")
 DATA_DIR.mkdir(exist_ok=True)
 
-OWNER_ID = int(os.environ.get("OWNER_ID", "0"))
 
 
 # ── Message store: loads from file, falls back to config defaults ──
@@ -88,19 +87,6 @@ def make_join_handler(bot_name: str, store: MessageStore):
 
 def make_setmsg_handler(bot_name: str, store: MessageStore):
     async def setmsg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        user = update.effective_user
-
-        if OWNER_ID == 0:
-            await update.message.reply_text(
-                "⚠️ لم يتم تعيين OWNER\\_ID في الـ Secrets بعد.",
-                parse_mode="Markdown",
-            )
-            return
-
-        if user.id != OWNER_ID:
-            await update.message.reply_text("🚫 هذا الأمر للمالك فقط.")
-            return
-
         args = context.args
         if not args or len(args) < 2:
             await update.message.reply_text(
@@ -133,12 +119,6 @@ def make_setmsg_handler(bot_name: str, store: MessageStore):
 
 def make_viewmsg_handler(bot_name: str, store: MessageStore):
     async def viewmsg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        user = update.effective_user
-
-        if OWNER_ID != 0 and user.id != OWNER_ID:
-            await update.message.reply_text("🚫 هذا الأمر للمالك فقط.")
-            return
-
         messages = store.get()
         text = f"📋 *الرسائل الحالية لـ {bot_name}:*\n\n"
         for i, msg in enumerate(messages, start=1):
