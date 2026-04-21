@@ -54,7 +54,7 @@ BOTS = [
         ],
     },
     {
-        "token_env": "BOT_TOKEN_3",
+        "token_env": "BOT_TOKEN",
         "name": "Bot 3",
         "messages": [
             (
