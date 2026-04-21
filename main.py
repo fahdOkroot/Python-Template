@@ -133,6 +133,25 @@ def make_viewmsg_handler(bot_name: str, store: MessageStore):
     return viewmsg
 
 
+def make_start_handler(bot_name: str):
+    async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        user = update.effective_user
+        if user.id == OWNER_ID:
+            await update.message.reply_text(
+                f"👋 *مرحباً بك في لوحة تحكم {bot_name}*\n\n"
+                "الأوامر المتاحة:\n\n"
+                "📝 `/setmsg 1 النص` — تغيير الرسالة الأولى\n"
+                "📝 `/setmsg 2 النص` — تغيير الرسالة الثانية\n"
+                "📝 `/setmsg 3 النص` — تغيير الرسالة الثالثة\n\n"
+                "👁 `/viewmsg` — عرض الرسائل الحالية",
+                parse_mode="Markdown",
+            )
+        else:
+            await update.message.reply_text("👋 أهلاً! هذا البوت يعمل تلقائياً.")
+
+    return start
+
+
 # ── Bot runner ──
 
 async def run_bot(token: str, bot_name: str, default_messages: list) -> None:
